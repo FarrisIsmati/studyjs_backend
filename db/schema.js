@@ -1,26 +1,6 @@
 const mongoose = require('./connection.js')
 
-const UserSchema = new mongoose.Schema({
-  'googleId': {},
-  'domain': {
-    'public': Boolean,
-    'topic': [TopicSchema]
-  }
-})
-
-const TopicSchema = new mongoose.Schema ({
-  'name' : {
-    type: String,
-    required: true
-  },
-  'subtopic': [SubtopicSchema],
-  'date': {
-    type: Date,
-    default: Date.now
-  }
-})
-
-const SubtopicSchema = new mongoose.Schema ({
+const subtopicSchema = new mongoose.Schema ({
   'name' : {
     type: String,
     required: true
@@ -29,9 +9,30 @@ const SubtopicSchema = new mongoose.Schema ({
     type: String,
     required: true
   },
-  'children': [SubtopicSchema]
+  'children': [this]
 })
 
-mongoose.model('UserSchema', PhraseSchema)
+const topicSchema = new mongoose.Schema ({
+  'name' : {
+    type: String,
+    required: true
+  },
+  'subtopic': [subtopicSchema],
+  'date': {
+    type: Date,
+    default: Date.now
+  }
+})
+
+const userSchema = new mongoose.Schema({
+  'username': String,
+  'googleId': String,
+  'domain': {
+    'public': Boolean,
+    'topic': [topicSchema]
+  }
+})
+
+mongoose.model('User', userSchema)
 
 module.exports = mongoose

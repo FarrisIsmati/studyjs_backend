@@ -2,7 +2,7 @@ const express         = require('express')
 const parser          = require('body-parser')
 const cors            = require('cors')
 
-//const mongoose      = require('./db/schema.js')
+const mongoose      = require('./db/schema.js')
 
 const passportSetup   = require('./config/passport-setup')
 const authRoutes      = require('./routes/auth-routes')
