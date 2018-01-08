@@ -1,15 +1,16 @@
-const mongoose    = require('./schema.js')
+const mongoose    = require('./schema')
 
-const User        = mongoose.model('UserSchema')
+const User        = mongoose.model('User')
+const seedData    = require('./seedData')
 
-// User.remove({})
-//   .then(() => {
-//     User.collection.insert(//)
-//       .then((user) => {
-//         console.log(phrase)
-//         process.exit()
-//       })
-//   })
-//   .catch((err) => {
-//     console.log(err)
-//   })
+User.remove({})
+  .then(() => {
+    User.collection.insert(seedData)
+      .then((user) => {
+        console.log(user)
+        process.exit()
+      })
+  })
+  .catch((err) => {
+    console.log(err)
+  })

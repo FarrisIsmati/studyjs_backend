@@ -5,10 +5,7 @@ const subtopicSchema = new mongoose.Schema ({
     type: String,
     required: true
   },
-  'data': {
-    type: String,
-    required: true
-  },
+  'data': Object,
   'children': [this]
 })
 
