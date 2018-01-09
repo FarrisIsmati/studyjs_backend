@@ -67,15 +67,4 @@ dataRouter.put('/user/topic/:id/:token', authenticate, (req, res) => {
   })
 })
 
-// Delete SubTopics/Children
-// Requries the TopicID & Token
-dataRouter.delete('/user/topic/:id/:token', authenticate, (req, res) => {
-  Users.update(
-    {googleId: res.locals.user.sub},
-    { $pull: { 'domain.topic' : { _id : req.params.id } } }
-  ).then((user) => {
-    res.status(200).json(user)
-  })
-})
-
 module.exports = dataRouter
