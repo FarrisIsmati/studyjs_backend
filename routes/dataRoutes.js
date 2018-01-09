@@ -5,6 +5,8 @@ const authenticate  = require('./authenticate.js')
 const mongoose      = require('../db/schema.js')
 
 const Users         = mongoose.model('User')
+const Topic         = mongoose.model('Topic')
+const Subtopic      = mongoose.model('Subtopic')
 
 //Get all users (Just for testing)
 dataRouter.get('/users', (req,res) => {
@@ -28,15 +30,43 @@ dataRouter.get('/user/:token', authenticate, (req, res) => {
     })
 })
 
-//Update user data
-dataRouter.put('/user/:token', authenticate, (req, res) => {
-  Users.findOneAndUpdate({"googleId": res.locals.user.sub}, req.body, {new: true})
+//Creating new topic
+dataRouter.post('/user/topic/:token', authenticate, (req, res) => {
+  Users.findOne({"googleId": res.locals.user.sub})
     .then((user) => {
       res.json(user)
-    })
-    .catch((err) => {
-      console.log(err)
+      let newTopic = new Topic(req.body)
+      user.domain.topic.push(newTopic)
+      console.log(user)
+      user.save()
+      .then((user) => {
+        res.status(200).json(user)
+      })
     })
 })
+
+// Edit Full topic/subtopics
+// Requries the topic ID & Token to edit the subtopic of a user
+dataRouter.put('/user/topic/:id/:token', authenticate, (req, res) => {
+  Users.update(
+    { googleId: res.locals.user.sub, 'domain.topic._id': req.params.id },
+    { $set: { 'domain.topic.$' : req.body } }
+  ).then(user => {
+    res.json(user)
+  })
+})
+
+// Delete topic
+// Requries the subtopic ID & Token to edit the subtopic of a user
+dataRouter.delete('/user/topic/:id/:token', authenticate, (req, res) => {
+  Users.update(
+    {googleId: res.locals.user.sub},
+    { $pull: { 'domain.topic' : { _id : req.params.id } } },
+    { safe: true }
+  ).then((user) => {
+    res.status(200).json(user)
+  })
+})
+
 
 module.exports = dataRouter

@@ -31,5 +31,7 @@ const userSchema = new mongoose.Schema({
 })
 
 mongoose.model('User', userSchema)
+mongoose.model('Topic', topicSchema)
+mongoose.model('Subtopic', subtopicSchema)
 
 module.exports = mongoose
