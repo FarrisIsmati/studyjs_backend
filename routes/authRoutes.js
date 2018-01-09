@@ -1,27 +1,25 @@
 const router    = require('express').Router()
-const passport  = require('passport')
-const jwt       = require('jsonwebtoken')
 
 const mongoose  = require('../db/schema')
-const Users     = mongoose.model('User')
-const keys      = require('../config/keys')
+const User     = mongoose.model('User')
 
-router.get('/logout', (req,res) => {
-  //Handle with passport
-  res.send('Logging out user')
-})
-
-router.get('/', (req,res) => {
-  res.send('Logged in')
-})
-
-router.get('/google', passport.authenticate('google', {
-  scope: ['profile']
-}))
-
-router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-  res.json({
-    'success': 'yes'
+router.post('/google', (req, res) => {
+  User.findOne({googleId: req.body.googleId})
+  .then(currentUser =>  {
+    if(currentUser){
+        res.json({
+          data: 'User already exists'
+        })
+    } else {
+        new User({
+            googleId: req.body.googleId,
+            username: req.body.username,
+        }).save().then((newUser) => {
+            res.json({
+              data: 'User created'
+            })
+        })
+    }
   })
 })
 

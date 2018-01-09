@@ -1,12 +1,11 @@
 const axios        = require('axios')
 
-module.exports = function isAuthenticated(req, res, next) {
+module.exports = (req, res, next) => {
   axios.get(`https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=` + req.params.token).then(function (response) {
-      console.log('it works')
-      return next()
+      res.locals.user = response.data
+      next()
     })
     .catch(function (error) {
-      console.log('it doesnt work')
-      res.redirect('http://localhost:3000')
+      res.send('You do not have access to this route')
     })
 }
