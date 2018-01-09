@@ -1,5 +1,4 @@
 const dataRouter    = require('express').Router()
-const axios         = require('axios')
 
 const authenticate  = require('./authenticate.js')
 const mongoose      = require('../db/schema.js')
@@ -30,7 +29,8 @@ dataRouter.get('/user/:token', authenticate, (req, res) => {
     })
 })
 
-//Creating new topic
+//Create Topic
+//Requires Token
 dataRouter.post('/user/topic/:token', authenticate, (req, res) => {
   Users.findOne({"googleId": res.locals.user.sub})
     .then((user) => {
@@ -45,6 +45,17 @@ dataRouter.post('/user/topic/:token', authenticate, (req, res) => {
     })
 })
 
+// Delete topic
+// Requries the TopicID & Token
+dataRouter.delete('/user/topic/:id/:token', authenticate, (req, res) => {
+  Users.update(
+    {googleId: res.locals.user.sub},
+    { $pull: { 'domain.topic' : { _id : req.params.id } } }
+  ).then((user) => {
+    res.status(200).json(user)
+  })
+})
+
 // Edit Full topic/subtopics
 // Requries the topic ID & Token to edit the subtopic of a user
 dataRouter.put('/user/topic/:id/:token', authenticate, (req, res) => {
@@ -56,17 +67,15 @@ dataRouter.put('/user/topic/:id/:token', authenticate, (req, res) => {
   })
 })
 
-// Delete topic
-// Requries the subtopic ID & Token to edit the subtopic of a user
+// Delete SubTopics/Children
+// Requries the TopicID & Token
 dataRouter.delete('/user/topic/:id/:token', authenticate, (req, res) => {
   Users.update(
     {googleId: res.locals.user.sub},
-    { $pull: { 'domain.topic' : { _id : req.params.id } } },
-    { safe: true }
+    { $pull: { 'domain.topic' : { _id : req.params.id } } }
   ).then((user) => {
     res.status(200).json(user)
   })
 })
-
 
 module.exports = dataRouter
