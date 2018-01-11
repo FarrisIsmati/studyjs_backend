@@ -10,7 +10,10 @@ const subtopicSchema = new mongoose.Schema ({
     default: false
   },
   'data': Object,
-  // 'subtopics': [this]
+  'date': {
+    type: Date,
+    default: Date.now
+  }
 })
 
 const topicSchema = new mongoose.Schema ({

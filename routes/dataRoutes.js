@@ -44,7 +44,7 @@ dataRouter.post('/user/topic/:token', authenticate, (req, res) => {
     })
 })
 
-// Delete topic
+// Delete Specific Topic
 // Requries the TopicID & Token
 dataRouter.delete('/user/topic/:id/:token', authenticate, (req, res) => {
   Users.update(
@@ -55,7 +55,7 @@ dataRouter.delete('/user/topic/:id/:token', authenticate, (req, res) => {
   })
 })
 
-// Edit topics arrangement
+// Edit Topics Arrangement
 // Requries the topic ID & Token to edit the subtopic of a user
 dataRouter.put('/user/topics/:token', authenticate, (req, res) => {
   Users.update(
@@ -67,10 +67,9 @@ dataRouter.put('/user/topics/:token', authenticate, (req, res) => {
   })
 })
 
-// Edit Full topic/subtopics
+// Edit specific Topics
 // Requries the topic ID & Token to edit the subtopic of a user
 dataRouter.put('/user/topic/:id/:token', authenticate, (req, res) => {
-  console.log(req.body)
   Users.update(
     { googleId: res.locals.user.sub, 'domain.topics._id': req.params.id },
     { $set: { 'domain.topics.$' : req.body } }
@@ -79,6 +78,15 @@ dataRouter.put('/user/topic/:id/:token', authenticate, (req, res) => {
   })
 })
 
-
+// Create a Subtopic
+// Requries the topic ID & Token to edit the subtopic of a user
+dataRouter.post('/user/topic/:id/:token', authenticate, (req, res) => {
+  Users.update(
+    { googleId: res.locals.user.sub, 'domain.topics._id': req.params.id },
+    { $push: { 'domain.topics.$.subtopics' : req.body } }
+  ).then(user => {
+    res.json(user)
+  })
+})
 
 module.exports = dataRouter
