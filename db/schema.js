@@ -5,8 +5,12 @@ const subtopicSchema = new mongoose.Schema ({
     type: String,
     required: true
   },
+  'show': {
+    type: Boolean,
+    default: false
+  },
   'data': Object,
-  'children': [this]
+  // 'subtopics': [this]
 })
 
 const topicSchema = new mongoose.Schema ({
@@ -14,7 +18,11 @@ const topicSchema = new mongoose.Schema ({
     type: String,
     required: true
   },
-  'subtopic': [subtopicSchema],
+  'show': {
+    type: Boolean,
+    default: true
+  },
+  'subtopics': [subtopicSchema],
   'date': {
     type: Date,
     default: Date.now
@@ -26,7 +34,7 @@ const userSchema = new mongoose.Schema({
   'googleId': String,
   'domain': {
     'public': Boolean,
-    'topic': [topicSchema]
+    'topics': [topicSchema]
   }
 })
 

@@ -34,14 +34,13 @@ dataRouter.get('/user/:token', authenticate, (req, res) => {
 dataRouter.post('/user/topic/:token', authenticate, (req, res) => {
   Users.findOne({"googleId": res.locals.user.sub})
     .then((user) => {
-      res.json(user)
       let newTopic = new Topic(req.body)
-      user.domain.topic.push(newTopic)
+      user.domain.topics.push(newTopic)
       console.log(user)
       user.save()
-      .then((user) => {
-        res.status(200).json(user)
-      })
+        .then((data) => {
+          res.status(200).json(data)
+        })
     })
 })
 
@@ -50,21 +49,36 @@ dataRouter.post('/user/topic/:token', authenticate, (req, res) => {
 dataRouter.delete('/user/topic/:id/:token', authenticate, (req, res) => {
   Users.update(
     {googleId: res.locals.user.sub},
-    { $pull: { 'domain.topic' : { _id : req.params.id } } }
+    { $pull: { 'domain.topics' : { _id : req.params.id } } }
   ).then((user) => {
     res.status(200).json(user)
+  })
+})
+
+// Edit topics arrangement
+// Requries the topic ID & Token to edit the subtopic of a user
+dataRouter.put('/user/topics/:token', authenticate, (req, res) => {
+  Users.update(
+    { googleId: res.locals.user.sub },
+    { $set: { 'domain.topics' : req.body } }
+  ).then(user => {
+    console.log(user)
+    res.json(user)
   })
 })
 
 // Edit Full topic/subtopics
 // Requries the topic ID & Token to edit the subtopic of a user
 dataRouter.put('/user/topic/:id/:token', authenticate, (req, res) => {
+  console.log(req.body)
   Users.update(
-    { googleId: res.locals.user.sub, 'domain.topic._id': req.params.id },
-    { $set: { 'domain.topic.$' : req.body } }
+    { googleId: res.locals.user.sub, 'domain.topics._id': req.params.id },
+    { $set: { 'domain.topics.$' : req.body } }
   ).then(user => {
     res.json(user)
   })
 })
+
+
 
 module.exports = dataRouter

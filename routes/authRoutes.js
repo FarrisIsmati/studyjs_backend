@@ -8,7 +8,7 @@ router.post('/google', (req, res) => {
   .then(currentUser =>  {
     if(currentUser){
         res.json({
-          data: 'User already exists'
+          alert: 'You are logged in!'
         })
     } else {
         new User({
@@ -16,7 +16,7 @@ router.post('/google', (req, res) => {
             username: req.body.username,
         }).save().then((newUser) => {
             res.json({
-              data: 'User created'
+              alert: 'Created a new user!'
             })
         })
     }
