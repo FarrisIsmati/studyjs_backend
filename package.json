@@ -28,6 +28,7 @@
     "cookie-session": "^2.0.0-beta.3",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "immutability-helper": "^2.6.4",
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^5.0.0-rc2",
     "passport": "^0.4.0",

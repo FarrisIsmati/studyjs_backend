@@ -1,4 +1,5 @@
 const dataRouter    = require('express').Router()
+const update        = require('immutability-helper')
 
 const authenticate  = require('./authenticate.js')
 const mongoose      = require('../db/schema.js')
@@ -86,6 +87,28 @@ dataRouter.post('/user/topic/:id/:token', authenticate, (req, res) => {
     { $push: { 'domain.topics.$.subtopics' : req.body } }
   ).then(user => {
     res.json(user)
+  })
+})
+
+// Edit a Subtopic
+// Requries the topic ID & Token to edit the subtopic of a user
+dataRouter.put('/user/topic/:id/:subtopic/:token', authenticate, (req, res) => {
+  Users.findOne({googleId: res.locals.user.sub})
+  .then((result)=>{
+    const topic = result.domain.topics.find((topic)=>{return topic._id == req.params.id})
+    const subtopicIndex = topic.subtopics.findIndex((subtopic)=>{return subtopic._id == req.params.subtopic})
+    const subtopic = topic.subtopics.find((subtopic)=>{return subtopic._id == req.params.subtopic})
+    const updatedSubtopic = update(subtopic,
+      { data: { $set: req.body.text}}
+    )
+    const updatedTopic = update(topic,{subtopics: {subtopicIndex: {$set: updatedSubtopic}}})
+
+    Users.update(
+      { googleId: res.locals.user.sub, 'domain.topics._id': req.params.id },
+      { $set: { 'domain.topics.$' : updatedTopic } }
+    ).then(user => {
+      res.json(topic)
+    })
   })
 })
 
