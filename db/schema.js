@@ -9,7 +9,10 @@ const subtopicSchema = new mongoose.Schema ({
     type: Boolean,
     default: false
   },
-  'data': Object,
+  'data': {
+    type: String,
+    default: ''
+  },
   'date': {
     type: Date,
     default: Date.now
