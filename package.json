@@ -4,6 +4,7 @@
   "description": "Be the master of your domain",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "node_modules/.bin/mocha"
   },
   "repository": {
