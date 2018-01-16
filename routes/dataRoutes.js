@@ -23,7 +23,7 @@ dataRouter.get('/users', (req,res) => {
 dataRouter.get('/user/:token', authenticate, (req, res) => {
   Users.findOne({"googleId" : res.locals.user.sub})
     .then((user) => {
-      res.json(user)
+      res.json({user})
     })
     .catch((err) => {
       console.log(err)

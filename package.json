@@ -1,14 +1,14 @@
 {
-  "name": "code_god",
+  "name": "study.js",
   "version": "1.0.0",
   "description": "Be the master of your domain",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FarrisIsmati/code_god.git"
+    "url": "git+https://github.com/FarrisIsmati/studyjs_backend.git"
   },
   "keywords": [
     "react",
@@ -19,21 +19,24 @@
   "author": "Farris Ismati",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FarrisIsmati/code_god/issues"
+    "url": "https://github.com/FarrisIsmati/studyjs_backend/issues"
   },
-  "homepage": "https://github.com/FarrisIsmati/code_god#readme",
+  "homepage": "https://github.com/FarrisIsmati/studyjs_backend#readme",
   "dependencies": {
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
     "cookie-session": "^2.0.0-beta.3",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "immutability-helper": "^2.6.4",
     "jsonwebtoken": "^8.1.0",
+    "mocha": "^4.1.0",
     "mongoose": "^5.0.0-rc2",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "passport-google-oauth20": "^1.0.0",
-    "passport-jwt": "^3.0.1"
+    "passport-jwt": "^3.0.1",
+    "supertest": "^3.0.0"
   }
 }

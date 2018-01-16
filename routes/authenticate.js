@@ -6,6 +6,6 @@ module.exports = (req, res, next) => {
       next()
     })
     .catch(function (error) {
-      res.send('You do not have access to this route')
+      res.status(404).send('You do not have access to this route')
     })
 }
