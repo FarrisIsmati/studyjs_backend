@@ -99,8 +99,9 @@ dataRouter.put('/user/topic/:id/:subtopic/:token', authenticate, (req, res) => {
     const subtopicIndex = topic.subtopics.findIndex((subtopic)=>{return subtopic._id == req.params.subtopic})
     const subtopic = topic.subtopics.find((subtopic)=>{return subtopic._id == req.params.subtopic})
     const updatedSubtopic = update(subtopic,
-      { data: { $set: req.body.text}}
+      { [req.body.value]: { $set: req.body.text}}
     )
+
     const updatedTopic = update(topic,{subtopics: {subtopicIndex: {$set: updatedSubtopic}}})
 
     Users.update(
