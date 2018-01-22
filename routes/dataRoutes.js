@@ -71,6 +71,7 @@ dataRouter.put('/user/topics/:token', authenticate, (req, res) => {
 // Edit specific Topics
 // Requries the topic ID & Token to edit the subtopic of a user
 dataRouter.put('/user/topic/:id/:token', authenticate, (req, res) => {
+  console.log(req.body)
   Users.update(
     { googleId: res.locals.user.sub, 'domain.topics._id': req.params.id },
     { $set: { 'domain.topics.$' : req.body } }
@@ -99,8 +100,9 @@ dataRouter.put('/user/topic/:id/:subtopic/:token', authenticate, (req, res) => {
     const subtopicIndex = topic.subtopics.findIndex((subtopic)=>{return subtopic._id == req.params.subtopic})
     const subtopic = topic.subtopics.find((subtopic)=>{return subtopic._id == req.params.subtopic})
     const updatedSubtopic = update(subtopic,
-      { data: { $set: req.body.text}}
+      { [req.body.value]: { $set: req.body.text}}
     )
+
     const updatedTopic = update(topic,{subtopics: {subtopicIndex: {$set: updatedSubtopic}}})
 
     Users.update(
